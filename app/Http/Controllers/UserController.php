@@ -13,6 +13,12 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+
+    public function create()
+{
+    return view('users.create'); // or return response()->json() if using modal
+}
+
     public function store(Request $request)
     {
         $request->validate([

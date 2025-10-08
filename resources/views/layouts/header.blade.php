@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #343a40;">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">MyApp</a>
+        <a class="navbar-brand text-white" href="{{ url('/') }}">MyApp</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,9 +19,3 @@
         </div>
     </div>
 </nav>
-
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand ms-3" href="{{ url('/') }}">MyApp</a>
-    </div>
-</nav> -->

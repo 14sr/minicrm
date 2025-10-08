@@ -17,43 +17,59 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    {{-- Employees Table --}}
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Company</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="employee-table">
-            @foreach ($employees as $employee)
-                <tr id="employee-{{ $employee->id }}">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $employee->first_name & $employee->last_name  }}</td>
-                    <td>{{ $employee->email }}</td>
-                    <td>{{ $employee->phone }}</td>
-                    <td>{{ $employee->company->name ?? '-' }}</td>
+    <div class="row">
+    @forelse($employees as $employee)
+        <div class="col-md-4 mb-4">
+            <div class="card employee-card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
 
-                    <td>
-                        <button type="button" class="btn btn-sm btn-warning editEmployeeBtn" data-bs-toggle="modal" data-bs-target="#editEmployeeModal" data-id="{{ $employee->id }}">
+                    {{-- Optional avatar circle --}}
+                    <div class="avatar-circle mx-auto mb-3">
+                        <span class="initials">
+                            {{ strtoupper(substr($employee->name, 0, 1)) }}
+                        </span>
+                    </div>
+
+                    <h5 class="card-title mb-1">
+                        {{ $employee->first_name . ' ' . $employee->last_name }}
+                    </h5>
+
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-envelope"></i> {{ $employee->email }}
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="bi bi-telephone"></i> {{ $employee->phone }}
+                    </p>
+                    <p class="text-muted small">
+                        <i class="bi bi-building"></i> {{ $employee->company?->name ?? '—' }}
+                    </p>
+
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <button type="button"
+                                class="btn btn-warning btn-sm editEmployeeBtn"
+                                data-id="{{ $employee->id }}">
                             Edit
                         </button>
 
                         <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                onclick="return confirm('Are you sure to delete this employee?')">Delete</button>
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this employee?')">
+                                Delete
+                            </button>
                         </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @empty
+        <p class="text-center text-muted">No employees found.</p>
+    @endforelse
+</div>
+
 
     {{-- Pagination --}}
     <div class="d-flex justify-content-center">
@@ -74,7 +90,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" name="first_name" class="form-control" value="{{ old('first_name') }}" required>
+                        <input type="text" name="first_name" class="form-control" value="{{ old('first_name') }}">
                         @error('first_name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -82,7 +98,7 @@
 
                     <div class="mb-3">
                         <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}" required>
+                        <input type="text" name="last_name" class="form-control" value="{{ old('last_name') }}">
                         @error('last_name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -106,7 +122,7 @@
 
                     <div class="mb-3">
                         <label for="company_id" class="form-label">Company</label>
-                        <select name="company_id" class="form-control" required>
+                        <select name="company_id" class="form-control">
                             <option value="">Select Company</option>
                             @foreach($companies as $company)
                                 <option value="{{ $company->id }}" {{ old('company_id') == $company->id ? 'selected' : '' }}>

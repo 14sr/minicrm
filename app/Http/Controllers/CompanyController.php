@@ -45,32 +45,33 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
+
+
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:companies',
-            'logo' => 'nullable|image|mimes:jpg,png|max:2048',
-            'website' => 'nullable|url',
-        ]);
+{
+    // Validate input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:companies,email',
+        'logo' => 'nullable|image|mimes:jpg,png|max:2048',
+        'website' => 'nullable|url',
+    ]);
 
-        $logo = null;
-         if ($request->hasFile('logo')) {
+    // Handle logo upload if present
+    if ($request->hasFile('logo')) {
         $file = $request->file('logo');
-        $filename = time() . '_' . $file->getClientOriginalName(); // Unique filename
-        $file->move(public_path('assets/images'), $filename);       // Move to public/assets/images
-        $validated['logo'] = 'assets/images/' . $filename;          // Save relative path in DB
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('assets/images'), $filename);
+        $validated['logo'] = 'assets/images/' . $filename;
     }
 
-        Company::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'logo' => $logo,
-            'website' => $request->website,
-        ]);
+    // Create company using validated data
+    Company::create($validated);
 
-        return redirect()->route('companies.index')->with('success', 'Company added!');
-    }
+    return redirect()->route('companies.index')
+                     ->with('success', 'Company added successfully!');
+}
 
   
 

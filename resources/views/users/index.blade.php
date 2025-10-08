@@ -15,36 +15,42 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-light">
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Website</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-            <tr id="user-{{ $user->id }}">
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->website }}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-warning editUserBtn" data-id="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#editUserModal">
-                        Edit
-                    </button>
+    <div class="row">
+        @forelse($users as $user)
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm border-0 rounded-3 user-card h-100">
+                    <div class="card-body text-center">
+                        <!-- Optional avatar -->
+                        <div class="mb-3">
+                            <img src="{{ asset('assets/images/noimg.jpg') }}" 
+                                 alt="User Avatar" 
+                                 class="rounded-circle border" 
+                                 width="60" height="60">
+                        </div>
+                        <h5 class="card-title mb-1 text-capitalize">{{ $user->name }}</h5>
+                        <p class="text-muted mb-2">{{ $user->email }}</p>
 
-                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
-                        Delete
-                    </button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                        @if(!empty($user->website))
+                            <p class="small text-secondary mb-3">
+                                <a href="{{ $user->website }}" target="_blank">{{ $user->website }}</a>
+                            </p>
+                        @endif
+
+                        <div class="d-flex justify-content-center gap-2">
+                            <button class="btn btn-warning btn-sm editUserBtn" data-id="{{ $user->id }}">Edit</button>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this user?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm px-3">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-muted text-center">No users found.</p>
+        @endforelse
+    </div>
 
     <div class="d-flex justify-content-center">
         {{ $users->links() }}
@@ -75,30 +81,43 @@
     </div>
 </div>
 
-{{-- Edit User Modal --}}
+<!-- Edit User Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="editUserForm" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="editUserId" name="user_id">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="edit_name" name="name" class="form-control mb-2" placeholder="Name">
-                    <input type="email" id="edit_email" name="email" class="form-control mb-2" placeholder="Email">
-                    <input type="text" id="edit_phone" name="phone" class="form-control mb-2" placeholder="Phone">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Update</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editUserForm">
+        @csrf
+        @method('PUT')
+
+        <div class="modal-header">
+          <h5 class="modal-title">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+
+        <div class="modal-body">
+          <input type="hidden" id="editUserId">
+
+          <div class="mb-3">
+            <label>Name</label>
+            <input type="text" id="edit_name" name="name" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label>Email</label>
+            <input type="email" id="edit_email" name="email" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label>Website</label>
+            <input type="text" id="edit_website" name="website" class="form-control">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Update</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 
 {{-- Delete User Modal --}}
