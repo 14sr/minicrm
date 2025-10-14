@@ -11,11 +11,9 @@ class CompanyController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        
+    {       
         $companies = Company::paginate(10);
-        return view('companies.index', compact('companies'));
-        
+        return view('companies.index', compact('companies'));       
     }
 
     /**
@@ -111,8 +109,5 @@ class CompanyController extends Controller
             return redirect()->route('companies.index')->with('error', 'Failed to delete company: ' . $e->getMessage());
         }
     }
-
- 
-
 
 }

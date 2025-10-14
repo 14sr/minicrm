@@ -7,9 +7,28 @@
 
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('public/assets/css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
 
-    
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css.map') }}">
+        <!-- <link rel="stylesheet" href="{{ asset('assets/css/icon.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/icon.min.css.map') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/icon.min.css') }}"> -->
+        <link rel="stylesheet" href="{{ asset('assets/css/style.min.css.map') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/icons/tabler-icons/tabler-icons.css') }}">
+
+
+        <link rel="stylesheet" href="{{ asset('assets/css/icons/tabler-icons/tabler-icons.css') }}">
+
+        <!-- @font-face {
+            font-family: 'Tabler Icons';
+            src: url('../../fonts/tabler-icons.woff2') format('woff2'),
+                url('../../fonts/tabler-icons.woff') format('woff'),
+                url('../../fonts/tabler-icons.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        } -->
 
     <style>
         body {
@@ -71,6 +90,24 @@
 
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+    $(document).ready(function() {
+        var options = {
+            chart: { type: 'line' },
+            series: [{ name: 'Sales', data: [10, 20, 30] }],
+            xaxis: { categories: ['Jan', 'Feb', 'Mar'] }
+        };
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    });
+    </script>
+
+    <script src="{{ asset('assets/js/app.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dashboard.js') }}"></script>
+     <script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
 
 </body>
 </html>

@@ -9,7 +9,7 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'email', 'logo', 'website'];
 
     // Relationship: one company has many employees
     public function employees()
